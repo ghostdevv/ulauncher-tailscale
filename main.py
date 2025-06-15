@@ -14,6 +14,7 @@ from fuzzyfinder import fuzzyfinder
 class TailscaleNode(TypedDict):
     hostname: str
     ipv4: str
+    online: bool
 
 
 class TailscaleExtension(Extension):
@@ -41,14 +42,26 @@ class TailscaleExtension(Extension):
                 self_node = status["Self"]
                 ipv4 = next((ip for ip in self_node["TailscaleIPs"] if "." in ip), "")
                 if ipv4:
-                    nodes.append({"hostname": self_node["HostName"], "ipv4": ipv4})
+                    nodes.append(
+                        {
+                            "hostname": self_node["HostName"],
+                            "ipv4": ipv4,
+                            "online": self_node["Online"],
+                        }
+                    )
 
             # Add peer nodes
             if "Peer" in status:
                 for peer in status["Peer"].values():
                     ipv4 = next((ip for ip in peer["TailscaleIPs"] if "." in ip), "")
                     if ipv4:
-                        nodes.append({"hostname": peer["HostName"], "ipv4": ipv4})
+                        nodes.append(
+                            {
+                                "hostname": peer["HostName"],
+                                "ipv4": ipv4,
+                                "online": peer["Online"],
+                            }
+                        )
 
             return nodes
         except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):
@@ -75,24 +88,26 @@ class KeywordQueryEventListener(EventListener):
         super().__init__()
         self.extension = extension
 
-    def on_event(self, event):  # type: ignore
+    def on_event(self, event, _):  # type: ignore
         limit = int(self.extension.preferences.get("limit", "9"))
         query = event.get_argument() or ""
 
-        nodes = fuzzyfinder(
-            query,
-            self.extension.list_nodes(),
-            accessor=lambda node: node["hostname"]
-        )
+        nodes: list[TailscaleNode] = list(
+            fuzzyfinder(
+                query,
+                self.extension.list_nodes(),
+                accessor=lambda node: node["hostname"],
+            )
+        )[:limit]
 
         items = [
             ExtensionResultItem(
                 icon="images/tailscale-appicon.png",
-                name=node["hostname"],
+                name=f"{node["hostname"]}{"" if node["online"] else " (offline)"}",
                 description=node["ipv4"],
                 on_enter=CopyToClipboardAction(node["ipv4"]),
             )
-            for node in list(nodes)[:limit]
+            for node in nodes
         ]
 
         return RenderResultListAction(items)

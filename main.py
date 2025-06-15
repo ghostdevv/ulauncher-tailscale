@@ -35,33 +35,23 @@ class TailscaleExtension(Extension):
             )
 
             status = json.loads(result.stdout)
-            nodes = []
+            nodes: List[TailscaleNode] = []
+
+            def add_node(node):
+                nodes.append(
+                    {
+                        "hostname": node["HostName"],
+                        "ipv4": next((ip for ip in node["TailscaleIPs"] if "." in ip), ""),
+                        "online": node["Online"],
+                    }
+                )
 
             # Add self node
-            if "Self" in status:
-                self_node = status["Self"]
-                ipv4 = next((ip for ip in self_node["TailscaleIPs"] if "." in ip), "")
-                if ipv4:
-                    nodes.append(
-                        {
-                            "hostname": self_node["HostName"],
-                            "ipv4": ipv4,
-                            "online": self_node["Online"],
-                        }
-                    )
+            add_node(status["Self"])
 
             # Add peer nodes
-            if "Peer" in status:
-                for peer in status["Peer"].values():
-                    ipv4 = next((ip for ip in peer["TailscaleIPs"] if "." in ip), "")
-                    if ipv4:
-                        nodes.append(
-                            {
-                                "hostname": peer["HostName"],
-                                "ipv4": ipv4,
-                                "online": peer["Online"],
-                            }
-                        )
+            for peer in status["Peer"].values():
+                add_node(peer)
 
             return nodes
         except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):

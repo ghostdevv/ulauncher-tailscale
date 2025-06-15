@@ -7,5 +7,19 @@
     "options": {
         "query_debounce": 0.1
     },
-    "preferences": []
+    "preferences": [
+        {
+            "id": "trigger",
+            "type": "keyword",
+            "name": "Trigger",
+            "default_value": "ts"
+        },
+        {
+            "id": "limit",
+            "type": "text",
+            "name": "Limit",
+            "description": "The number of results to display",
+            "default_value": "9"
+        }
+    ]
 }

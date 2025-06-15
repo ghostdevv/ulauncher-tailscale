@@ -1,0 +1,11 @@
+{
+    "required_api_version": "2",
+    "name": "Tailscale",
+    "description": "Tailscale ulauncher extension",
+    "developer_name": "Willow (GHOST)",
+    "icon": "images/tailscale-appicon.png",
+    "options": {
+        "query_debounce": 0.1
+    },
+    "preferences": []
+}

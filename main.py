@@ -95,10 +95,8 @@ class TailscaleExtension(Extension):
         except subprocess.CalledProcessError:
             pass
 
-        print(f"b4 {self.online}")
         time.sleep(1)
         self.check_online()
-        print(f"a4 {self.online}")
         return self.render(query)
 
     def check_online(self):

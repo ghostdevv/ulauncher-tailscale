@@ -3,7 +3,7 @@
     "name": "Tailscale",
     "description": "Tailscale ulauncher extension",
     "developer_name": "Willow (GHOST)",
-    "icon": "images/tailscale-appicon.png",
+    "icon": "images/tailscale.png",
     "options": {
         "query_debounce": 0.1
     },

@@ -53,6 +53,14 @@ class TailscaleExtension(Extension):
                     }
                 )
 
+            # Demo Code
+            # add_node({ "HostName": "laptop", "TailscaleIPs": ["100.102.11.93"], "Online": True })
+            # add_node({ "HostName": "desktop", "TailscaleIPs": ["100.96.204.133"], "Online": True })
+            # add_node({ "HostName": "raspberry-pi", "TailscaleIPs": ["100.79.64.12"], "Online": False })
+            # add_node({ "HostName": "router", "TailscaleIPs": ["100.115.81.24"], "Online": True })
+            # add_node({ "HostName": "nas", "TailscaleIPs": ["100.103.105.243"], "Online": True })
+            # add_node({ "HostName": "cloud-server", "TailscaleIPs": ["100.72.94.105"], "Online": True })
+
             # Add self node
             add_node(status["Self"])
             self.online = status["Self"]["Online"]

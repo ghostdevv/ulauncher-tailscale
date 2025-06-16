@@ -1,7 +1,7 @@
 {
     "required_api_version": "2",
     "name": "Tailscale",
-    "description": "Tailscale ulauncher extension",
+    "description": "A ULauncher extension that lightly wraps Tailscale to expose node IPs and turning Tailscale on/off",
     "developer_name": "Willow (GHOST)",
     "icon": "images/tailscale.png",
     "options": {

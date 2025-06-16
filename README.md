@@ -1,6 +1,8 @@
 # ULauncher Tailscale
 
-wip
+A ULauncher extension that lightly wraps Tailscale to expose node IPs and turning Tailscale on/off.
+
+![](./.github/demo.png)
 
 ## Notes
 

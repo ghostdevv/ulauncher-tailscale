@@ -9,9 +9,9 @@
     },
     "preferences": [
         {
-            "id": "trigger",
+            "id": "tailscale_kw",
             "type": "keyword",
-            "name": "Trigger",
+            "name": "Tailscale",
             "default_value": "ts"
         },
         {
